@@ -46,7 +46,7 @@ chomp($in[0]);
 @plateList = split("\t", $in[0]);
 shift @plateList; #rid of OTUID;
 shift @plateList; #rid of SPUTM;
-shift @plateList; #rid of MAXPP;
+#shift @plateList; #rid of MAXPP;
 #rid of taxonomy
 if ($plateList[$#plateList] eq "Consensus Lineage") {
 	pop @plateList;
@@ -70,7 +70,7 @@ for($a=1; $a <= $#in; $a++) {
 		$sputumOTUs++;
 	}
 	shift @woline; #rid of SPUTUM
-	shift @woline; #rid of MAXPP
+	#shift @woline; #rid of MAXPP
 	$OTUsOnPlates{$otu} = [ @woline ]; 
 }
 #Initialize seqPlates

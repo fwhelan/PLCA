@@ -43,7 +43,7 @@ chomp($in[0]);
 @plateList = split("\t", $in[0]);
 shift @plateList; #rid of OTUID;
 shift @plateList; #rid of SPUTM;
-shift @plateList; #rid of MAXPP;
+#shift @plateList; #rid of MAXPP;
 #Make a copy of plateList
 @plateListCopy = @plateList;
 #Initialize OTUList & OTUsOnPlates
@@ -52,7 +52,7 @@ for($a=1; $a <= $#in; $a++) {
 	@woline = split("\t", $in[$a]);
 	$otu = shift @woline; #rid of OTUID
 	$otu = shift @woline; #rid of SPUTUM
-	$otu = shift @woline; #rid of MAXPP
+	#$otu = shift @woline; #rid of MAXPP
 	$OTUsOnPlates{$otu} = [ @woline ];
 }
 #Initialize seqPlates
