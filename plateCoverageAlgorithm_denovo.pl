@@ -16,14 +16,17 @@
 #Author: Fiona J Whelan
 #Date: April 30th 2015; March 19th 2018
 #Algorithm to determine which media plates need to be sequenced
-#This script takes in an OTU table which has OTUID, SPUTUM, and MAXPP columns preceeding the actual plates in question. The algorithm then works to minimize the number of plates that need to be sequenced in order to capture all OTUs present above the input abundance. Abundance should be input as decimals such as 0.001 which corresponds to 0.1% relative abundance.
+#This script takes in an OTU table which has OTU_ID, Original_sample, and Maximum_abundance_across_culture columns preceeding the actual plates in question. The algorithm then works to minimize the number of plates that need to be sequenced in order to capture all OTUs present above the input abundance. Abundance should be input as decimals such as 0.001 which corresponds to 0.1% relative abundance.
 
 #Usage: plateCoverageAlgorithm_denovo.pl otu_table_maxpp.txt abund
 #output: otu_table_maxpp_seqPlates_abund.txt
 
 #Check usage
 if (($#ARGV+1) != 2) {
-        print "\nUsage: plateCoverageAlgorithm_denovo.pl otu_table_maxpp.txt abund (in decimal)\n";
+        print "\nUsage: plateCoverageAlgorithm_denovo.pl otu_table_maxpp.txt <culture-enrichment threshold> (in decimal)\n";
+	print "\twhere otu_table_maxpp.txt is a tab-delimited table with the following column structure: OTU ID Original_sample Maximum_abundance_across_culture Plate1 Plate2 ... PlateX Taxonomy\n";
+	print "\t      the abundance threshold is the cutoff at which you wish to include an OTU/species in the output\n";
+	print "Please see the github readme for more detail: github.com/fwhelan/PLCA\n";
         exit;
 }
 
@@ -36,14 +39,14 @@ $abund = $ARGV[1];
 chomp($abund);
 print $abund."\n";
 #Open files
-open (OUT, ">", $1."_seqPlates_$abund.txt") or die "$!";
+open (OUT, ">", $1."_denovoPLCA_$abund.txt") or die "$!";
 #Initialize plateList
 @in = <IN>;
 chomp($in[0]);
 @plateList = split("\t", $in[0]);
 shift @plateList; #rid of OTUID;
-shift @plateList; #rid of SPUTM;
-#shift @plateList; #rid of MAXPP;
+shift @plateList; #rid of Original_sample;
+shift @plateList; #rid of MAXPP;
 #Make a copy of plateList
 @plateListCopy = @plateList;
 #Initialize OTUList & OTUsOnPlates
@@ -51,8 +54,8 @@ shift @plateList; #rid of SPUTM;
 for($a=1; $a <= $#in; $a++) {
 	@woline = split("\t", $in[$a]);
 	$otu = shift @woline; #rid of OTUID
-	$otu = shift @woline; #rid of SPUTUM
-	#$otu = shift @woline; #rid of MAXPP
+	$otu = shift @woline; #rid of Original_sample
+	$otu = shift @woline; #rid of MAXPP
 	$OTUsOnPlates{$otu} = [ @woline ];
 }
 #Initialize seqPlates

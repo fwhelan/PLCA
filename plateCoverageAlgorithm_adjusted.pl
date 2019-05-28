@@ -16,14 +16,18 @@
 #Author: Fiona J Whelan
 #Date: April 30th 2015; March 19th 2018
 #Algorithm to determine which media plates need to be sequenced
-#This script takes in an OTU table which has OTUID, SPUTUM, and MAXPP columns preceeding the actual plates in question. The algorithm then works to minimize the number of plates that need to be sequenced in order to capture all OTUs present above the input abundance. Abundance should be input as decimals such as 0.001 which would be 0.1% relative abundance.
+#This script takes in an OTU table which has OTU_ID, Original_sample, and Maximum_abundance_across_culture columns preceeding the actual plates in question. The algorithm then works to minimize the number of plates that need to be sequenced in order to capture all OTUs present above the input abundance. Abundance should be input as decimals such as 0.001 which would be 0.1% relative abundance.
 
-#Usage: plateCoverageAlgorithm_adjusted.pl otu_table_maxpp.txt Sputabund abund
+#Usage: plateCoverageAlgorithm_adjusted.pl otu_table_maxpp.txt culture-independent_abund culture-enriched_abund
 #output: otu_table_maxpp_seqPlates_abund.txt
 
 #Check usage
 if (($#ARGV+1) != 3) {
-        print "\nUsage: plateCoverageAlgorithm_adjusted.pl otu_table_maxpp.txt <abundance in sputum> <abundance threshold on plates> (in decimal)\n";
+        print "\nUsage: plateCoverageAlgorithm_adjusted.pl otu_table_maxpp.txt <culture-independent threshold> <culture-enrichment threshold> (in decimal)\n";
+	print "\twhere otu_table_maxpp.txt is a tab-delimited table with the following column structure: OTU ID Original_sample Maximum_abundance_across_culture Plate1 Plate2 ... PlateX Taxonomy\n";
+	print "\t      the abundance in the original sample is the abundance cutoff in the original sample for OTUs to be included in the output\n";
+ 	print "\t      the abundance threshold is the cutoff at which an OTU is to be considered cultured\n";
+ 	print "Please see the github readme for more detail: github.com/fwhelan/PLCA\n";
         exit;
 }
 
@@ -39,16 +43,16 @@ $abund = $ARGV[2];
 chomp($abund);
 print $abund."\n";
 #Open files
-open (OUT, ">", $1."_seqPlates_$abund.txt") or die "$!";
+open (OUT, ">", $1."_adjustedPLCA_$Sputabund"."_"."$abund.txt") or die "$!";
 #Initialize plateList
 @in = <IN>;
 chomp($in[0]);
 @plateList = split("\t", $in[0]);
 shift @plateList; #rid of OTUID;
-shift @plateList; #rid of SPUTM;
-#shift @plateList; #rid of MAXPP;
+shift @plateList; #rid of Original_sample;
+shift @plateList; #rid of MAXPP;
 #rid of taxonomy
-if ($plateList[$#plateList] eq "Consensus Lineage") {
+if (($plateList[$#plateList] eq "Consensus Lineage") || ($plateList[$#plateList] eq "ConsensusLineage") || ($plateList[$#plateList] eq "taxonomy")) {
 	pop @plateList;
 }
 #Make a copy of plateList
@@ -69,7 +73,7 @@ for($a=1; $a <= $#in; $a++) {
 		$OTUsInSputum{$otu} = [ $woline[0] ];
 		$sputumOTUs++;
 	}
-	shift @woline; #rid of SPUTUM
+	shift @woline; #rid of Original_sample
 	#shift @woline; #rid of MAXPP
 	$OTUsOnPlates{$otu} = [ @woline ]; 
 }
@@ -95,11 +99,13 @@ foreach my $b ( keys %OTUsInSputum ) {
 		$seqPlates[$plateX] = 1;
 		push @markedForDeletion, $b;
 		$plateList[$plateX] = 0;
+		#print "OTU $b included.\n";
 		#for all OTUs present on plateX at abund > abund
 		foreach $e ( keys %OTUsInSputum ) {
 			@tmp = @{$OTUsOnPlates{$e}};
 			if ($tmp[$plateX] >= $abund) {
 				push @markedForDeletion, $e;
+				#print "OTU $e included.\n";
 			}
 		}
 	} elsif ($#count == 0) {
@@ -145,6 +151,7 @@ while (scalar(%OTUsInSputum)) {
 		@tmp = @{$OTUsOnPlates{$g}};
 		if ($tmp[$plateID] > $abund) {
 			delete $OTUsInSputum{$g};
+			#print "OTU $g included.\n";
 		}
 	}
 	#continue until hash is empty
