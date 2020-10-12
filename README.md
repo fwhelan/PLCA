@@ -68,7 +68,7 @@ Plate20
 ```
 
 ## _adjusted_ PLCA
-`perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.0001 0.005` will subset all OTUs to only those present at >=0.0001 (0.01%) in the original sample, and target those for culture-enriched metagenomic sequencing. An OTU is considered cultured, if it is found on a plate with an abundance of >=0.005 (0.5%). Sometimes, OTUs that are identified in the orignal sample greater than the abundance threshold is not cultured on any plate. In these cases, a warning will be output by the _adjusted_ PLCA, for example `WARNING: OTU 227 isn't present on a plate above the abundance threshold of 0.005 and will not be included in the coverage algorithm's calculations.` This means that this OTU will not be targetted for culture-enriched metagenomics unless the culture-enrichment threshold is adjusted. For example:
+`perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.0001 0.005` will subset all OTUs to only those present at >=0.0001 (0.01%) in the original sample, and target those for culture-enriched metagenomic sequencing. An OTU is considered cultured, if it is found on a plate with an abundance of >=0.005 (0.5%). Sometimes, OTUs that are identified in the orignal sample greater than the abundance threshold is not cultured on any plate. In these cases, a warning will be output by the _adjusted_ PLCA, for example `WARNING: OTU 137 isn't present on a plate above the abundance threshold of 0.005 and will not be included in the coverage algorithm's calculations.` This means that this OTU will not be targetted for culture-enriched metagenomics unless the culture-enrichment threshold is adjusted. For example:
 ```
 perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.001 0.0001
 0.001
@@ -77,6 +77,6 @@ WARNING: OTU 187 isn't present on a plate above the abundance threshold of 0.000
 
 WARNING: Of 11, 1 will be ignored.
 
-Plate1
+Plate14
 ```
 In this case, OTU 187 was not cultured and thus is ignored in the calculation of culture-enriched plates.
