@@ -74,7 +74,7 @@ for($a=1; $a <= $#in; $a++) {
 		$sputumOTUs++;
 	}
 	shift @woline; #rid of Original_sample
-	#shift @woline; #rid of MAXPP
+	shift @woline; #rid of MAXPP
 	$OTUsOnPlates{$otu} = [ @woline ]; 
 }
 #Initialize seqPlates
