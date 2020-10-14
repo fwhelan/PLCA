@@ -33,7 +33,7 @@ We recently performed culture-enrichment on a set of cystic fibrosis lung microb
 16S rRNA gene sequencing was performed on the original sample as well as these 24 cultured plates. `PLCA_tutorial/otu_table.txt` includes the relative abundance information for the original sputum sample, the culturing, as well as a maximum relative abundance of each OTU across culture conditions.
 
 ## _denovo_ PLCA
-`perl plateCoverageAlgorithm_denovo.pl otu_table.txt 0.0001` will calculate the culture conditions necessary for metagenomic sequencing in order to cover all OTUs >=0.0001 (0.01%) present in the culture enrichment (according to the 16S rRNA gene sequencing results). When we run the _denovo_ PLCA with this abundance threshold, the following should be printed to screen:
+`perl plateCoverageAlgorithm_denovo.pl otu_table.txt 0.0001` will calculate the culture conditions necessary for metagenomic sequencing in order to cover all OTUs >0.0001 (0.01%) present in the culture enrichment (according to the 16S rRNA gene sequencing results). When we run the _denovo_ PLCA with this abundance threshold, the following should be printed to screen:
 ```
 0.0001
 Plate2
@@ -56,7 +56,7 @@ Plate20
 Plate23
 Plate24
 ```
-Additionally, these results are output to `otu_table_denovoPLCA_0.0001.txt`. In this case, 19 of the 24 original plates are needed to recapitulate all OTUs >= 0.01%. In contrast, a less stringent abundance cutoff results in less plates being necessary:
+Additionally, these results are output to `otu_table_denovoPLCA_0.0001.txt`. In this case, 19 of the 24 original plates are needed to recapitulate all OTUs > 0.01%. In contrast, a less stringent abundance cutoff results in less plates being necessary:
 ```
 perl plateCoverageAlgorithm_denovo.pl otu_table.txt 0.1
 0.1
@@ -68,7 +68,7 @@ Plate20
 ```
 
 ## _adjusted_ PLCA
-`perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.0001 0.005` will subset all OTUs to only those present at >=0.0001 (0.01%) in the original sample, and target those for culture-enriched metagenomic sequencing. An OTU is considered cultured, if it is found on a plate with an abundance of >=0.005 (0.5%). Sometimes, OTUs that are identified in the orignal sample greater than the abundance threshold is not cultured on any plate. In these cases, a warning will be output by the _adjusted_ PLCA, for example `WARNING: OTU 137 isn't present on a plate above the abundance threshold of 0.005 and will not be included in the coverage algorithm's calculations.` This means that this OTU will not be targetted for culture-enriched metagenomics unless the culture-enrichment threshold is adjusted. For example:
+`perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.0001 0.005` will subset all OTUs to only those present at >0.0001 (0.01%) in the original sample, and target those for culture-enriched metagenomic sequencing. An OTU is considered cultured, if it is found on a plate with an abundance of >0.005 (0.5%). Sometimes, OTUs that are identified in the orignal sample greater than the abundance threshold is not cultured on any plate. In these cases, a warning will be output by the _adjusted_ PLCA, for example `WARNING: OTU 137 isn't present on a plate above the abundance threshold of 0.005 and will not be included in the coverage algorithm's calculations.` This means that this OTU will not be targetted for culture-enriched metagenomics unless the culture-enrichment threshold is adjusted. For example:
 ```
 perl plateCoverageAlgorithm_adjusted.pl otu_table.txt 0.001 0.0001
 0.001
