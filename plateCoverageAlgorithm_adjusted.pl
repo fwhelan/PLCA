@@ -68,8 +68,8 @@ for($a=1; $a <= $#in; $a++) {
 	if ($woline[$#woline]=~/p_/) {
 		pop @woline;
 	}
-	#Only add OTU to list if it is > $abund
-	if ($woline[0] >= $Sputabund) {
+	#Only add OTU to list if it is > $Sputabund
+	if ($woline[0] > $Sputabund) {
 		$OTUsInSputum{$otu} = [ $woline[0] ];
 		$sputumOTUs++;
 	}
@@ -88,8 +88,7 @@ foreach my $b ( keys %OTUsInSputum ) {
 	#check to see if there is only one non zero elemner in tmpPlateList
 	@count = "";
 	foreach ($d=0 ; $d <= $#tmpPlateList; $d++) {
-		#if ($tmpPlateList[$d] > 0) {
-		if ($tmpPlateList[$d] >= $abund) {
+		if ($tmpPlateList[$d] > $abund) {
 			push @count, $d;
 		}
 	}
@@ -103,7 +102,7 @@ foreach my $b ( keys %OTUsInSputum ) {
 		#for all OTUs present on plateX at abund > abund
 		foreach $e ( keys %OTUsInSputum ) {
 			@tmp = @{$OTUsOnPlates{$e}};
-			if ($tmp[$plateX] >= $abund) {
+			if ($tmp[$plateX] > $abund) {
 				push @markedForDeletion, $e;
 				#print "OTU $e included.\n";
 			}
