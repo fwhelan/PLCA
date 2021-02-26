@@ -3,7 +3,7 @@ PLate Coverage Algorithm (PLCA) for Culture-Enriched MetaGenomics (CEMG)
 
 An algorithm for determining the optimal subset of culture plates for conducting culture-enriched metagenomic sequencing based on an OTU table obtained from 16S rRNA gene sequencing (or other) marker gene sequencing.
 
-The PLCA was developed in the <a <href://surettelab.ca>Surette laboratory</a>.
+The PLCA was developed in the <a href://surettelab.ca>Surette laboratory</a>.
 
 Inputs:  
 a. an OTU table in tab-delimited format. Entries in the table must be formatted as relative abundance measures and not raw read counts. The first column is expected to be the OTU ID; the second column is expected to be the culture-independent (i.e. original) sample; the remaining columns represent the culture-enriched samples, one per column. The table does not need to be OTUs; abundances of species, ASVs, or non-16S rRNA marker gene studies can also be used.
