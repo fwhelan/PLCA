@@ -153,6 +153,10 @@ while (scalar(%OTUsInSputum)) {
 			#print "OTU $g included.\n";
 		}
 	}
+	#reset county array
+	for ($f=0; $f <= $#plateList; $f++) {
+		$county[$f] = 0;
+	}
 	#continue until hash is empty
 }
 
