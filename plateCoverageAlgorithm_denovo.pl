@@ -125,6 +125,10 @@ while (scalar(%OTUsOnPlates)) {
 			delete $OTUsOnPlates{$g};
 		}
 	}
+	#reset county array
+	for ($f=0; $f <= $#plateList; $f++) {
+		$county[$f] = 0;
+	}
 	#continue until hash is empty
 }
 #Output seqPlates to OUT
